@@ -70,11 +70,21 @@ exports.callback = catchAsync(async (req, res) => {
         query('SELECT * FROM site WHERE discord = ?', [discordID])
     ]);
     const result = accountsResult;
+    const resultCadastro = await query('SELECT email, telefone, data_nascimento, indicacao FROM site WHERE discord = ?', [discordID]);
 
+    let needsCadastro = true
     let needsSteamLink = true
     if (result.length > 0) {
         // Se o usuário já existe
-        console.log('Conta encontrada:', result[0]);
+        console.log('Conta encontrada', result[0]);
+
+        if (resultCadastro.length > 0) {
+            const userData = resultCadastro[0];
+            if (userData.email && userData.telefone && userData.data_nascimento && userData.indicacao) {
+                needsCadastro = false
+            }
+        }
+
         if (result[0].license === 0) {
             needsSteamLink = false
         }
@@ -105,6 +115,7 @@ exports.callback = catchAsync(async (req, res) => {
         usuario: user,
         guilds,
         token,
+        needsCadastro,
         needsSteamLink,
         discordID
     });

@@ -1,18 +1,19 @@
-const mysql = require('mysql2');
+const { Client } = require('pg');
 
-const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'Machado@Luan121107',
-    database: 'groove_street'
-});
-
-db.connect((err) => {
-    if (err) {
-        console.error('Erro ao conectar ao banco de dados:', err);
-        return;
+const client = new Client({
+    connectionString: 'postgresql://postgres.iicmgbptlszhiqweyzuk:*FdvF$*QHh254dA@aws-0-sa-east-1.pooler.supabase.com:6543/postgres',
+    ssl: {
+        rejectUnauthorized: false
     }
-    console.log('Conectado ao banco de dados MySQL');
 });
 
-module.exports = db;
+client.connect()
+    .then(() => {
+        console.log('Conexão com o banco de dados estabelecida com sucesso!');
+    })
+    .catch(err => {
+        console.error('Erro ao conectar com o banco de dados:', err.stack);
+    });
+
+
+module.exports = client;
