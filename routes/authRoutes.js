@@ -19,11 +19,11 @@ router.get('/auth/steam', (req, res, next) => {
 
     req.session.discordID = discordID;
 
-    const returnURL = `http://localhost:3000/auth/steam/return?discordID=${discordID}`;
+    const returnURL = `https://backend-nyc.onrender.com/auth/steam/return?discordID=${discordID}`;
 
     const steamAuth = new SteamStrategy({
         returnURL: returnURL,
-        realm: 'http://localhost:3000/',
+        realm: 'https://backend-nyc.onrender.com/',
         apiKey: 'A49233D1BCFBF3B6A8C036647AFEF856'
     }, function (identifier, profile, done) {
         profile.identifier = identifier;
