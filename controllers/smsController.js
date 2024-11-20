@@ -5,21 +5,27 @@ const authToken = 'e14d45f2929cda9b3b6c6de88feb7ee1';
 
 const client = new twilio(accountSid, authToken);
 
+
+
 exports.sendSms = (req, res) => {
-    const { to, code } = req.body;
+    const { phone, message } = req.body;
+
+    if (!phone || !message) {
+        return res.status(400).send({ error: 'Phone and message are required.' });
+    }
 
     client.messages
         .create({
-            body: code,
-            from: '+16186154640', 
-            to: to, 
+            body: message,
+            from: '+1 618 615 4640', // Twilio's WhatsApp number
+            to: phone // Add the whatsapp: prefix
         })
-        .then(message => {
-            console.log(message.sid); // ID da mensagem
-            res.status(200).send('Mensagem enviada com sucesso');
+        .then(response => {
+            console.log(response.sid);
+            res.status(200).send({ success: true, sid: response.sid });
         })
-        .catch(err => {
-            console.error(err);
-            res.status(500).send('Erro ao enviar mensagem');
+        .catch(error => {
+            console.error(error);
+            res.status(error.status || 500).send({ error: error.message });
         });
-}
+};

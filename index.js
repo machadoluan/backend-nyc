@@ -59,7 +59,7 @@ app.use((req, res, next) => {
 
 app.use(authRoutes);
 app.use('/api/checkout', checkOutRoutes);
-app.use('/api/sms', smsRoutes);
+app.use('/api', smsRoutes);
 
 // Error handling
 app.use((err, req, res, next) => {

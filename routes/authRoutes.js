@@ -15,7 +15,6 @@ router.get('/auth/steam', (req, res, next) => {
 
     if (!discordID) {
         console.log('Discord ID não encontrado');
-        return res.redirect('/auth/discord');
     }
 
     req.session.discordID = discordID;
