@@ -18,9 +18,14 @@ const limiter = rateLimit({
     max: 100 // limite por IP
 });
 app.use(limiter);
-
+const corsOptions = {
+    origin: 'https://front-groove.vercel.app',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'], // Cabeçalhos permitidos
+  };
+  
 // CORS configurado
-app.use(cors(config.cors));
+app.use(cors(corsOptions));
 
 // Parser com limites
 app.use(bodyParser.json({ limit: '10kb' }));
