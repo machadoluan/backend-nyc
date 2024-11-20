@@ -20,15 +20,16 @@ const limiter = rateLimit({
 app.use(limiter);
 const corsOptions = {
     origin: (origin, callback) => {
-      if (['https://front-groove.vercel.app'].includes(origin)) {
-        return callback(null, true);
-      }
-      callback(new Error('Acesso negado por CORS'));
+        if (['https://front-groove.vercel.app'].includes(origin)) {
+            return callback(null, true);
+        }
+        callback(new Error('Infelizmente você nao pode fazer isso'));
     },
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
-  };
-  
+    credentials: true
+};
+
 // CORS configurado
 app.use(cors(corsOptions));
 
