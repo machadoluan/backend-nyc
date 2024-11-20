@@ -166,7 +166,7 @@ exports.authSteam = catchAsync(async (req, res) => {
     // Limpa a sessão após o uso
     req.session.discordID = null;
 
-    res.redirect('http://localhost:4200/');
+    res.redirect('https://front-groove.vercel.app/');
 });
 
 // Configuração do Passport mais segura
