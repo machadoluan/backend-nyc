@@ -70,7 +70,8 @@ exports.callback = catchAsync(async (req, res) => {
         query('SELECT * FROM site WHERE discord = ?', [discordID])
     ]);
     const result = accountsResult;
-    const resultCadastro = await query('SELECT email, telefone, data_nascimento, indicacao FROM site WHERE discord = ?', [discordID]);
+    const resultCadastro = await query('SELECT * FROM site WHERE discord = ?', [discordID]);
+    const userData = resultCadastro[0] ||{};
 
     let needsCadastro = true
     let needsSteamLink = true
@@ -109,10 +110,17 @@ exports.callback = catchAsync(async (req, res) => {
         console.log('Discord ID armazenado na sessão:', req.session.discordID);
     });
 
-    const token = jwt.sign(user, 'secreto', { expiresIn: '1h' });
+    const tokenPayload = {
+        user: user,
+        userData: userData,
+    };
+
+    
+    const token = jwt.sign(tokenPayload, 'secreto', { expiresIn: '1h' });
     res.json({
         message: 'Autenticação bem-sucedida!',
-        usuario: user,
+        userDiscord: user,
+        userData: userData,
         guilds,
         token,
         needsCadastro,
@@ -194,6 +202,20 @@ exports.cadastroUser = (req, res) => {
             res.status(500).send('Erro interno no servidor');
         } else {
             res.json({ message: 'Usuário registrado com sucesso!', id: result.insertId });
+        }
+    });
+}
+
+
+exports.getUser = (req, res) => {
+    const query = 'SELECT * FROM site'
+
+    db.query(query, (err, result) => {
+        if (err) {
+            console.error('Erro ao buscar o usuario.', err);
+            res.status(500).send('Erro interno no servidor');
+        } else {
+            res.json(result);
         }
     });
 }

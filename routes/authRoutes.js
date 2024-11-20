@@ -35,7 +35,6 @@ router.get('/auth/steam', (req, res, next) => {
 
     passport.authenticate('steam-custom')(req, res, next);
 });
-
 router.get('/auth/steam/return',
     passport.authenticate('steam', { failureRedirect: '/' }),
     (req, res, next) => {
@@ -45,6 +44,7 @@ router.get('/auth/steam/return',
     authController.authSteam
 );
 
+router.get('/get-user', authController.getUser)
 router.post('/cadastro', authController.cadastroUser)
 
 
